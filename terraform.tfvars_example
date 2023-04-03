@@ -1,0 +1,25 @@
+token="OCM TOKEN Value"
+url="https://api.openshift.com"
+operator_role_prefix="mobbtf"
+cluster_name="mobbtf-01"
+aws_region="us-east-2"
+multi_az=true
+availability_zones = ["us-east-2a","us-east-2b","us-east-2c"]
+#Private Link Cluster
+enable_private_link=true
+vpc_cidr_block="10.66.0.0/16"
+private_subnet_cidrs=["10.66.1.0/24", "10.66.2.0/24", "10.66.3.0/24"]
+public_subnet_cidrs=["10.66.101.0/24", "10.66.102.0/24", "10.66.103.0/24"]
+additional_tags={
+     Terraform = "true"
+     Environment = "dev"
+     TFOwner = "mobbtf@redhat.com"
+     ROSAClusterName="mobbtf-01"
+   }
+#ROSA Cluster Info
+create_account_roles=false
+account_role_prefix="ManagedOpenShift"
+create_vpc=true
+create_aad_app=false
+create_idp_aad=false
+aad_tenant_id="AZURE_Tenant_id"
