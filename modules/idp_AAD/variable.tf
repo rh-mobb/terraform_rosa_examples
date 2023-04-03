@@ -21,18 +21,18 @@ variable "idp_name" {
 variable "aad_client_id" {
     description = "Azure Application (client) ID"
     type = string
-    default = "f0cb833b-e271-4638-8285-36975513ab43"  
+    default = "XXXXX"  
 }
 
 variable "aad_client_secret" {
     description = "Azure Client credentials"
     type = string
-    default = "Gvw8Q~66_fZ9G5UHT6YtqJH56DnAUhJeGZbEdbKQ"  
+    default = "XXXX"  
 }
 
 variable "aad_tenant_id" {
     description = "Azure Directory (tenant) ID"
     type = string
-    default = "64dc69e4-d083-49fc-9569-ebece1dd1408"
+    default = "XXX"
     sensitive = true  
 }
