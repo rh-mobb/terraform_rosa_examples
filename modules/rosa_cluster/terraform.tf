@@ -6,7 +6,8 @@ terraform {
     }
     ocm = {
       #version = ">= 0.1"
-      version = "0.0.2"      
+      #version = "0.0.2"
+      version = "1.0.1"      
       source  = "terraform-redhat/ocm"
     }
   }

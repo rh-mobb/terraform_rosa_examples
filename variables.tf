@@ -87,6 +87,23 @@ variable multi_az {
     default = false
 }
 
+variable "worker_node_replicas" {
+  default     = null
+  description = "Number of worker nodes to provision. Single zone clusters need at least 2 nodes, multizone clusters need at least 3 nodes"
+  type        = number
+}
+
+variable "proxy" {
+  default = null
+  description = "cluster-wide HTTP or HTTPS proxy settings"
+  type = object({
+    http_proxy = string # required  http proxy
+    https_proxy = string # required  https proxy
+    additional_trust_bundle = optional(string) # a string contains contains a PEM-encoded X.509 certificate bundle that will be added to the nodes' trusted certificate store.
+    no_proxy = optional(string) # no proxy
+  })
+}
+
 #Private link cluster Info
 variable "enable_private_link" {
   type        = bool
