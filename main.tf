@@ -1,14 +1,21 @@
 
 module account_role {
+    create_account_roles = var.create_account_roles
     source = "./modules/account_roles"
-    ocm_environment = var.ocm_environment    
-    openshift_version = var.rosa_openshift_version
+    token = var.token
+    url                  = var.url
     account_role_prefix = var.account_role_prefix
+    path = var.path
+    ocm_environment = var.ocm_environment    
+    rosa_openshift_version = var.rosa_openshift_version
+    account_role_policies = var.account_role_policies
+    all_versions = var.all_versions
+    operator_role_policies = var.operator_role_policies
+    additional_tags = var.additional_tags
 } 
 
 
 module "byo_vpc" {
-    #count = var.create_vpc ? 1 : 0
     create_vpc = var.create_vpc
     source = "./modules/network"
     aws_region = var.aws_region
@@ -36,9 +43,22 @@ module openshift_vpc {
 }
 */
 
+# Create managed OIDC config
+module "byo_oidc_config" {
+  token                = var.token
+  url                  = var.url
+  source               = "./modules/oidc_provider"
+  managed              = var.managed_oidc
+  operator_role_prefix = var.operator_role_prefix
+  account_role_prefix  = var.account_role_prefix
+  additional_tags      = var.additional_tags
+  path                 = var.path
+}
+
 module "rosa_cluster" {
     source = "./modules/rosa_cluster"
     cluster_name = var.cluster_name
+    rosa_openshift_version = var.rosa_openshift_version
     token = var.token
     url = var.url
     aws_region = var.aws_region
@@ -50,6 +70,14 @@ module "rosa_cluster" {
     enable_private_link = var.enable_private_link
     private_subnet_ids = var.enable_private_link ? module.byo_vpc.private_subnets : []
     vpc_cidr_block = var.enable_private_link ? var.vpc_cidr_block : null
+    proxy = var.proxy
+    autoscaling_enabled = var.autoscaling_enabled
+    min_replicas        = var.min_replicas
+    max_replicas        = var.max_replicas
+    oidc_config_id      = var.managed_oidc ? null : module.byo_oidc_config.id
+
+    #ToDo set cluster  service-cidr, pod-cidr, host prefix
+
 } 
 
 locals {
@@ -62,13 +90,15 @@ locals {
 
 #TODO test locals
 module operator_roles_and_oidc {
-    source = "./modules/operator_roles_and_oidc"
-    token = var.token
-    account_role_prefix = var.account_role_prefix
-    operator_role_prefix = var.operator_role_prefix
-    cluster_id = module.rosa_cluster.cluster_id
-    oidc_thumbprint = module.rosa_cluster.oidc_thumbprint
-    oidc_endpoint_url = module.rosa_cluster.oidc_endpoint_url  
+    source                  = "./modules/operator_roles_and_oidc"
+    token                   = var.token
+    account_role_prefix     = var.account_role_prefix
+    operator_role_prefix    = var.operator_role_prefix
+    cluster_id              = module.rosa_cluster.cluster_id
+    oidc_thumbprint         = module.rosa_cluster.oidc_thumbprint
+    oidc_endpoint_url       = module.rosa_cluster.oidc_endpoint_url
+    managed_oidc            = var.managed_oidc
+    path                    = var.path  
 }
 
 module aad_application{

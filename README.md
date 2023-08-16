@@ -1,8 +1,8 @@
 # Provision ROSA STS Cluster using Red Hat OCM Terraform provider
 
-This guide shows how to create a Public or Private Link STS ROSA cluster, the required operator IAM roles and the oidc provider using Red Hat [OCM Terraform Provider](https://github.com/terraform-redhat/terraform-provider-ocm). This guide also provides examples of creating other necessary components like AWS VPC, Azure App Registration for Azure AD IDP provider and Azure AD IDP for ROSA Cluster. These additional component creations can be enabled using terraform variables. The goal of this guide is to show how to create a ROSA STS cluster and how to add additional terraform modules to extend cluster provisioning using terraform automation. 
+This guide shows how to create a Public or Private Link STS ROSA cluster, the required operator IAM roles and the oidc provider using Red Hat [OCM Terraform Provider](https://github.com/terraform-redhat/terraform-provider-rhcs). This guide also provides examples of creating other necessary components like AWS VPC, Azure App Registration for Azure AD IDP provider and Azure AD IDP for ROSA Cluster. These additional component creations can be enabled using terraform variables. The goal of this guide is to show how to create a ROSA STS cluster and how to add additional terraform modules to extend cluster provisioning using terraform automation. 
 
-> This guide extends the official OCM ROSA Cluster TF privisioning example. Detail info can be found [here](https://github.com/terraform-redhat/terraform-provider-ocm/tree/main/examples/create_rosa_cluster/create_rosa_sts_cluster/classic_sts/cluster)
+> This guide extends the official OCM ROSA Cluster TF privisioning example. Detail info can be found [here](https://github.com/terraform-redhat/terraform-provider-rhcs/tree/main/examples/create_rosa_sts_cluster/classic_sts/cluster)
 
 ## Prerequisites
 

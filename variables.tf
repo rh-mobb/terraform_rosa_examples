@@ -5,7 +5,9 @@ variable redhat_aws_account_id {
 
 variable rosa_openshift_version {
     type = string
-    default = "4.12"
+    default = "4.13"
+    description = "Desired version of OpenShift for the cluster, for example '4.1.0'. If version is greater than the currently running version, an upgrade will be scheduled."
+
 }
 
 variable token {
@@ -23,14 +25,64 @@ variable ocm_environment {
     default = "production"
 }
 
+# Account Roles
 variable account_role_prefix {
     type = string
     default = "mobb"
 }
 
+variable account_role_policies {
+  description = "account role policies details for account roles creation"
+  type = object({
+    sts_installer_permission_policy             = string
+    sts_support_permission_policy               = string
+    sts_instance_worker_permission_policy       = string
+    sts_instance_controlplane_permission_policy = string
+  })
+  default = null
+}
+
+# Used ?
+variable "rh_oidc_provider_thumbprint" {
+  description = "Thumbprint for https://rh-oidc.s3.us-east-1.amazonaws.com"
+  type        = string
+  default     = "917e732d330f9a12404f73d8bea36948b929dffc"
+}
+
+variable all_versions {
+  description = "OpenShift versions"
+  type        = object({
+    item = object({
+      id   = string
+      name = string
+    })
+    search = string
+    order  = string
+    items  = list(object({
+      id   = string
+      name = string
+    }))
+  })
+  default = null
+}
+
+# Operrator Roles
 variable operator_role_prefix {
     type = string
     default = "mobbtf"
+}
+
+variable operator_role_policies {
+  description = "operator role policies details for operator roles creation"
+  type = object({
+    openshift_cloud_credential_operator_cloud_credential_operator_iam_ro_creds_policy = string
+    openshift_cloud_network_config_controller_cloud_credentials_policy                = string
+    openshift_cluster_csi_drivers_ebs_cloud_credentials_policy                        = string
+    openshift_image_registry_installer_cloud_credentials_policy                       = string
+    openshift_ingress_operator_cloud_credentials_policy                               = string
+    openshift_machine_api_aws_cloud_credentials_policy                                = string
+  })
+  default = null
 }
 
 # Module selection
@@ -46,6 +98,12 @@ variable create_vpc {
     default = false
 }
 
+variable managed_oidc {
+    type = bool
+    description = "Red Hat managed or unmanaged (Customer hosted) OIDC Configuration"
+    default = true
+}
+
 variable create_aad_app {
     type = bool
     description = "Create a Azure AD app for ROSA cluster idp"
@@ -57,7 +115,6 @@ variable create_idp_aad {
     description = "Create Azure AD IDP for ROSA cluster"
     default = false
 }
-
 
 # ROSA Cluster info
 variable "cluster_name" {
@@ -77,8 +134,14 @@ variable "additional_tags" {
      Environment = "dev"
      TFOwner = "mobb@redhat.com"
    }
-  description = "Additional resource tags"
+  description = "Additional AWS resource tags"
   type        = map(string)
+}
+
+variable "path" {
+  description = "(Optional) The arn path for the account/operator roles as well as their policies."
+  type        = string
+  default     = null
 }
 
 variable multi_az {
@@ -91,6 +154,25 @@ variable "worker_node_replicas" {
   default     = null
   description = "Number of worker nodes to provision. Single zone clusters need at least 2 nodes, multizone clusters need at least 3 nodes"
   type        = number
+}
+
+
+variable "autoscaling_enabled" {
+  description = "Enables autoscaling. This variable requires you to set a maximum and minimum replicas range using the `max_replicas` and `min_replicas` variables."
+  type        = string
+  default     = "false"
+}
+
+variable "min_replicas" {
+  description = "The minimum number of replicas for autoscaling."
+  type        = number
+  default     = null
+}
+
+variable "max_replicas" {
+  description = "The maximum number of replicas not exceeded by the autoscaling functionality."
+  type        = number
+  default     = null
 }
 
 variable "proxy" {
