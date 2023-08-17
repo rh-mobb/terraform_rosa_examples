@@ -1,30 +1,30 @@
 
 module account_role {
-    create_account_roles = var.create_account_roles
-    source = "./modules/account_roles"
-    token = var.token
-    url                  = var.url
-    account_role_prefix = var.account_role_prefix
-    path = var.path
-    ocm_environment = var.ocm_environment    
-    rosa_openshift_version = var.rosa_openshift_version
-    account_role_policies = var.account_role_policies
-    all_versions = var.all_versions
-    operator_role_policies = var.operator_role_policies
-    additional_tags = var.additional_tags
+    create_account_roles    = var.create_account_roles
+    source                  = "./modules/account_roles"
+    token                   = var.token
+    url                     = var.url
+    account_role_prefix     = var.account_role_prefix
+    path                    = var.path
+    ocm_environment         = var.ocm_environment    
+    rosa_openshift_version  = var.rosa_openshift_version
+    account_role_policies   = var.account_role_policies
+    all_versions            = var.all_versions
+    operator_role_policies  = var.operator_role_policies
+    additional_tags         = var.additional_tags
 } 
 
 
 module "byo_vpc" {
-    create_vpc = var.create_vpc
-    source = "./modules/network"
-    aws_region = var.aws_region
-    vpc_name = var.vpc_name
-    additional_tags = var.additional_tags
-    vpc_cidr_block = var.vpc_cidr_block
-    availability_zones = var.availability_zones
-    private_subnet_cidrs = var.private_subnet_cidrs
-    public_subnet_cidrs = var.public_subnet_cidrs
+    create_vpc              = var.create_vpc
+    source                  = "./modules/network"
+    aws_region              = var.aws_region
+    vpc_name                = var.vpc_name
+    additional_tags         = var.additional_tags
+    vpc_cidr_block          = var.vpc_cidr_block
+    availability_zones      = var.availability_zones
+    private_subnet_cidrs    = var.private_subnet_cidrs
+    public_subnet_cidrs     = var.public_subnet_cidrs
 }
 #TODO switch to mobb VPC module
 /*
@@ -56,36 +56,36 @@ module "byo_oidc_config" {
 }
 
 module "rosa_cluster" {
-    source = "./modules/rosa_cluster"
-    cluster_name = var.cluster_name
-    rosa_openshift_version = var.rosa_openshift_version
-    token = var.token
-    url = var.url
-    aws_region = var.aws_region
-    multi_az = var.multi_az
-    availability_zones =  var.availability_zones   
-    account_role_prefix = var.account_role_prefix
-    operator_role_prefix = var.operator_role_prefix
+    source                  = "./modules/rosa_cluster"
+    cluster_name            = var.cluster_name
+    rosa_openshift_version  = var.rosa_openshift_version
+    token                   = var.token
+    url                     = var.url
+    aws_region              = var.aws_region
+    multi_az                = var.multi_az
+    availability_zones      =  var.availability_zones   
+    account_role_prefix     = var.account_role_prefix
+    operator_role_prefix    = var.operator_role_prefix
     #private link cluster values
-    enable_private_link = var.enable_private_link
-    private_subnet_ids = var.enable_private_link ? module.byo_vpc.private_subnets : []
-    vpc_cidr_block = var.enable_private_link ? var.vpc_cidr_block : null
-    proxy = var.proxy
-    autoscaling_enabled = var.autoscaling_enabled
-    min_replicas        = var.min_replicas
-    max_replicas        = var.max_replicas
-    oidc_config_id      = var.managed_oidc ? null : module.byo_oidc_config.id
-
+    enable_private_link     = var.enable_private_link
+    private_subnet_ids      = var.enable_private_link ? module.byo_vpc.private_subnets : []
+    vpc_cidr_block          = var.enable_private_link ? var.vpc_cidr_block : null
+    proxy                   = var.proxy
+    autoscaling_enabled     = var.autoscaling_enabled
+    min_replicas            = var.min_replicas
+    max_replicas            = var.max_replicas
+    oidc_config_id          = var.managed_oidc ? null : module.byo_oidc_config.id
+    additional_tags         = var.additional_tags
     #ToDo set cluster  service-cidr, pod-cidr, host prefix
 
 } 
 
 locals {
-  cluster_id = module.rosa_cluster.cluster_id
-  oidc_thumbprint = module.rosa_cluster.oidc_thumbprint
+  cluster_id        = module.rosa_cluster.cluster_id
+  oidc_thumbprint   = module.rosa_cluster.oidc_thumbprint
   oidc_endpoint_url = module.rosa_cluster.oidc_endpoint_url
   #cluster_dns_name = module.rosa_cluster.cluster_dns
-  cluster_dns_name = "change_me"
+  cluster_dns_name  = "change_me"
 }
 
 #TODO test locals
@@ -98,16 +98,17 @@ module operator_roles_and_oidc {
     oidc_thumbprint         = module.rosa_cluster.oidc_thumbprint
     oidc_endpoint_url       = module.rosa_cluster.oidc_endpoint_url
     managed_oidc            = var.managed_oidc
-    path                    = var.path  
+    path                    = var.path
+    additional_tags         = var.additional_tags  
 }
 
 module aad_application{
-    source = "./modules/AAD_application"
-    create_aad_app = var.create_aad_app
-    aad_app_name = var.aad_app_name
-    aad_app_password_name = var.aad_app_password_name
-    aad_app_redirect_uri = "https://oauth-openshift.apps.${local.cluster_dns_name}/oauth2callback/${var.idp_name}"
-    location = var.aad_location
+    source                  = "./modules/AAD_application"
+    create_aad_app          = var.create_aad_app
+    aad_app_name            = var.aad_app_name
+    aad_app_password_name   = var.aad_app_password_name
+    aad_app_redirect_uri    = "https://oauth-openshift.apps.${local.cluster_dns_name}/oauth2callback/${var.idp_name}"
+    location                = var.aad_location
 }
 /*
 module aad_idp{
