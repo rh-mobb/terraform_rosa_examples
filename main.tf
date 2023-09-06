@@ -25,6 +25,7 @@ module "byo_vpc" {
     availability_zones      = var.availability_zones
     private_subnet_cidrs    = var.private_subnet_cidrs
     public_subnet_cidrs     = var.public_subnet_cidrs
+    single_nat_gateway      = var.single_nat_gateway
 }
 #TODO switch to mobb VPC module
 /*
@@ -66,16 +67,17 @@ module "rosa_cluster" {
     availability_zones      =  var.availability_zones   
     account_role_prefix     = var.account_role_prefix
     operator_role_prefix    = var.operator_role_prefix
-    #private link cluster values
-    enable_private_link     = var.enable_private_link
-    private_subnet_ids      = var.enable_private_link ? module.byo_vpc.private_subnets : []
-    vpc_cidr_block          = var.enable_private_link ? var.vpc_cidr_block : null
+    machine_type            = var.machine_type
     proxy                   = var.proxy
     autoscaling_enabled     = var.autoscaling_enabled
     min_replicas            = var.min_replicas
     max_replicas            = var.max_replicas
     oidc_config_id          = var.managed_oidc ? null : module.byo_oidc_config.id
-    additional_tags         = var.additional_tags
+    additional_tags         = var.additional_tags    
+    #private link cluster values
+    enable_private_link     = var.enable_private_link
+    private_subnet_ids      = var.enable_private_link ? module.byo_vpc.private_subnets : []
+    vpc_cidr_block          = var.enable_private_link ? var.vpc_cidr_block : null
     #ToDo set cluster  service-cidr, pod-cidr, host prefix
 
 } 

@@ -60,6 +60,11 @@ variable multi_az {
     default = false
 }
 
+variable "machine_type" {
+  description = "The AWS instance type that used for the instances creation ."
+  type        = string
+}
+
 variable "worker_node_replicas" {
   default     = null
   description = "Number of worker nodes to provision. Single zone clusters need at least 2 nodes, multizone clusters need at least 3 nodes"

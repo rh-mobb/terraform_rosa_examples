@@ -46,3 +46,11 @@ variable "public_subnet_cidrs" {
   default     = ["10.66.101.0/24", "10.66.102.0/24", "10.66.103.0/24"]
 }
 
+variable "single_nat_gateway" {
+  type        = bool
+  description = "Single NAT or per NAT for subnet"
+  default     = false
+}
+
+
+
