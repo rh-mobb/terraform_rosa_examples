@@ -15,3 +15,7 @@ provider "rhcs" {
   token = var.token
   url = var.url
 }
+
+provider "aws" {
+  region = var.aws_region
+}

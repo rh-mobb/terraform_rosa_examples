@@ -19,7 +19,14 @@ additional_tags={
 #ROSA Cluster Info
 create_account_roles=false
 account_role_prefix="ManagedOpenShift"
-create_vpc=true
+create_vpc=false
+managed_oidc=true
+vpc_name="kumudutf"
+rosa_openshift_version="4.12.15"
 create_aad_app=false
 create_idp_aad=false
 aad_tenant_id="AZURE_Tenant_id"
+worker_node_replicas = 2
+autoscaling_enabled = true
+min_replicas = 2
+max_replicas = 4

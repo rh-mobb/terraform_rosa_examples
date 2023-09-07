@@ -8,12 +8,16 @@ terraform {
       source = "hashicorp/azurerm"
       version = "~>3.0"
     }    
-    ocm = {
-      source  = "terraform-redhat/ocm"
-      #version = ">= 0.1"
-      version = "0.0.2"
+    rhcs = {
+      version = ">= 1.1.0"
+      source  = "terraform-redhat/rhcs"
     }
   }
+}
+
+provider "rhcs" {
+  token = var.token
+  url = var.url
 }
 
 provider "aws" {
@@ -30,7 +34,3 @@ provider "azurerm" {
   # tenant_id = "XXXX-XXXX-XXX-XXXX"
 }
 
-provider "ocm" {
-  token = var.token
-  url = var.url
-}
