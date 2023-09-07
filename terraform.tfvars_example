@@ -1,25 +1,39 @@
-token="OCM TOKEN Value"
+token="Replace_OCM TOKEN Value"
 url="https://api.openshift.com"
+redhat_aws_account_id="Replace_AZURE_Tenant_id"
 operator_role_prefix="mobbtf"
+ocm_environment="production"
 cluster_name="mobbtf-01"
-aws_region="us-east-2"
+aws_region="us-west-2"
 multi_az=true
-availability_zones = ["us-east-2a","us-east-2b","us-east-2c"]
+availability_zones = ["us-west-2a","us-west-2b","us-west-2c"]#["us-west-2a"]#
 #Private Link Cluster
 enable_private_link=true
-vpc_cidr_block="10.66.0.0/16"
-private_subnet_cidrs=["10.66.1.0/24", "10.66.2.0/24", "10.66.3.0/24"]
-public_subnet_cidrs=["10.66.101.0/24", "10.66.102.0/24", "10.66.103.0/24"]
+vpc_cidr_block="10.12.0.0/16"
+private_subnet_cidrs=["10.12.0.0/22", "10.12.4.0/22", "10.12.8.0/22"]
+public_subnet_cidrs=["10.12.128.0/24", "10.12.129.0/24", "10.12.130.0/24"]
 additional_tags={
      Terraform = "true"
      Environment = "dev"
-     TFOwner = "mobbtf@redhat.com"
+     owner = "mobbtf@redhat.com"
      ROSAClusterName="mobbtf-01"
+     project="val_aws_vpn"
+     jira="cssi-1341" 
    }
 #ROSA Cluster Info
 create_account_roles=false
 account_role_prefix="ManagedOpenShift"
 create_vpc=true
+managed_oidc=true
+vpc_name="mobbvpc"
+single_nat_gateway=true
+rosa_openshift_version="4.12.15"
 create_aad_app=false
 create_idp_aad=false
 aad_tenant_id="AZURE_Tenant_id"
+machine_type="m6a.2xlarge" #m5.xlarge
+worker_node_replicas = 2
+autoscaling_enabled = true
+min_replicas = 3
+#Change min to at least 3 for HA
+max_replicas = 6
