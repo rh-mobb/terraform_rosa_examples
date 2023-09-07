@@ -27,3 +27,19 @@ variable url {
     type = string
     default = "https://api.openshift.com"
 }
+
+variable additional_tags {
+    type = map(string)
+}
+
+variable managed_oidc {
+    type = bool
+    description = "Red Hat managed or unmanaged (Customer hosted) OIDC Configuration"
+    default = true
+}
+
+variable "path" {
+  description = "(Optional) The arn path for the account/operator roles as well as their policies."
+  type        = string
+  default     = null
+}
