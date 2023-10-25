@@ -5,9 +5,9 @@ terraform {
       version = ">= 4.20.0"
     }
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "~>3.0"
-    }    
+    }
     rhcs = {
       version = ">= 1.1.0"
       source  = "terraform-redhat/rhcs"
@@ -15,13 +15,13 @@ terraform {
   }
 }
 
+# Export token using the RHCS_TOKEN environment variable
 provider "rhcs" {
-  token = var.token
-  url = var.url
+  url   = var.url
 }
 
 provider "aws" {
-  region  = var.aws_region
+  region = var.aws_region
 }
 
 provider "azurerm" {

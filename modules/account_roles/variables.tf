@@ -1,24 +1,13 @@
-variable token {
-  type = string
-  sensitive = true
-}
-
-variable url {
-    type = string
-    default = "https://api.openshift.com"
+variable "url" {
+  type        = string
+  description = "Provide OCM environment by setting a value to url"
+  default     = "https://api.openshift.com"
 }
 
 variable "create_account_roles" {
   description = "This attribute determines whether the module should create account roles or not"
   type        = bool
   default     = false
-}
-
-# Used ?
-variable "rh_oidc_provider_thumbprint" {
-  description = "Thumbprint for https://rh-oidc.s3.us-east-1.amazonaws.com"
-  type        = string
-  default     = "917e732d330f9a12404f73d8bea36948b929dffc"
 }
 
 variable "account_role_prefix" {

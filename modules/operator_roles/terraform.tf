@@ -11,7 +11,7 @@ terraform {
   }
 }
 
+# Export token using the RHCS_TOKEN environment variable
 provider "rhcs" {
-  token = var.token
   url = var.url
 }

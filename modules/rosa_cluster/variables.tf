@@ -1,9 +1,4 @@
 #OCM settings
-variable token {
-  type = string
-  sensitive = true
-}
-
 variable url {
     type = string
     default = "https://api.openshift.com"
@@ -113,7 +108,7 @@ variable "enable_private_link" {
   default     = false
 }
 
-variable "private_subnet_ids" {
+variable "aws_subnet_ids" {
   type        = list(any)
   description = "VPC private subnets IDs for ROSA Cluster"
   default = []

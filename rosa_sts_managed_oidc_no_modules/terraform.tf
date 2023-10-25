@@ -5,7 +5,7 @@ terraform {
       version = ">= 4.20.0"
     }
     rhcs = {
-      version = ">= 1.1.0"
+      version = ">= 1.4.0"
       source  = "terraform-redhat/rhcs"
     }
   }
@@ -16,4 +16,6 @@ provider "rhcs" {
   url = var.url
 }
 
-
+provider "aws" {
+  region = var.aws_region
+}

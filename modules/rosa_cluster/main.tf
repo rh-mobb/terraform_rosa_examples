@@ -13,14 +13,8 @@ locals {
   worker_node_replicas = try(var.worker_node_replicas, var.multi_az ? 3 : 2) 
 }
 
-# Declare the data sources
-/*data "aws_availability_zones" "available" {
-  state = "available"
-}*/
-
 data "aws_caller_identity" "current" {
 }
-
 
 resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   name                  = var.cluster_name
@@ -44,7 +38,7 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   #Private link settings
   private               = var.enable_private_link
   aws_private_link      = var.enable_private_link
-  aws_subnet_ids        = var.private_subnet_ids
+  aws_subnet_ids        = var.aws_subnet_ids
   machine_cidr          = var.enable_private_link ? var.vpc_cidr_block : null  
 
 }
