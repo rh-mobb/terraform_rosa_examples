@@ -26,7 +26,7 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   version              = var.rosa_openshift_version
   proxy                = var.proxy
   compute_machine_type = var.machine_type
-  replicas             = var.worker_node_replicas
+  replicas             = local.worker_node_replicas
   autoscaling_enabled  = var.autoscaling_enabled
   min_replicas         = var.min_replicas
   max_replicas         = var.max_replicas
