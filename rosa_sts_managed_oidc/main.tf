@@ -90,5 +90,7 @@ module "rosa_cluster" {
   #private link cluster values
   enable_private_link = var.enable_private_link
   aws_subnet_ids   = var.create_vpc ? module.vpc.private_subnets : var.aws_subnet_ids
+
+  depends_on = [module.account_role]
 }
 
