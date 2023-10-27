@@ -86,6 +86,7 @@ module "rosa_cluster" {
   max_replicas           = var.max_replicas
   oidc_config_id         = module.oidc_provider.id
   additional_tags        = var.additional_tags
+  vpc_cidr_block         = var.vpc_cidr_block
 
   #private link cluster values
   enable_private_link = var.enable_private_link

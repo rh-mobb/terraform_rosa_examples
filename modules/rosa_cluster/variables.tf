@@ -1,7 +1,7 @@
 #OCM settings
-variable url {
-    type = string
-    default = "https://api.openshift.com"
+variable "url" {
+  type    = string
+  default = "https://api.openshift.com"
 }
 
 #AWS settings
@@ -18,23 +18,23 @@ variable "availability_zones" {
 
 #Cluster settings
 variable "cluster_name" {
-    type = string
-    default = "kumudu-tf-01"
+  type    = string
+  default = "kumudu-tf-01"
 }
 
-variable rosa_openshift_version {
-    type = string
-    default = "4.11.35"
+variable "rosa_openshift_version" {
+  type    = string
+  default = "4.11.35"
 }
 
-variable account_role_prefix {
-    type = string
-    default = "kumudu"
+variable "account_role_prefix" {
+  type    = string
+  default = "kumudu"
 }
 
-variable operator_role_prefix {
-    type = string
-    default = "mobbkh"
+variable "operator_role_prefix" {
+  type    = string
+  default = "mobbkh"
 }
 
 variable "vpc_cidr_block" {
@@ -49,10 +49,10 @@ variable "path" {
   default     = null
 }
 
-variable multi_az {
-    type = bool
-    description = "Multi AZ Cluster for High Availability"
-    default = false
+variable "multi_az" {
+  type        = bool
+  description = "Multi AZ Cluster for High Availability"
+  default     = false
 }
 
 variable "machine_type" {
@@ -86,13 +86,13 @@ variable "max_replicas" {
 }
 
 variable "proxy" {
-  default = null
+  default     = null
   description = "cluster-wide HTTP or HTTPS proxy settings"
   type = object({
-    http_proxy = string # required  http proxy
-    https_proxy = string # required  https proxy
+    http_proxy              = string           # required  http proxy
+    https_proxy             = string           # required  https proxy
     additional_trust_bundle = optional(string) # a string contains contains a PEM-encoded X.509 certificate bundle that will be added to the nodes' trusted certificate store.
-    no_proxy = optional(string) # no proxy
+    no_proxy                = optional(string) # no proxy
   })
 }
 variable "additional_tags" {
@@ -111,12 +111,10 @@ variable "enable_private_link" {
 variable "aws_subnet_ids" {
   type        = list(any)
   description = "VPC private subnets IDs for ROSA Cluster"
-  default = []
+  default     = []
 }
 
-#byo oidc
-variable oidc_config_id {
-    type = string
-    description = "BYO oidc id"
-} 
-
+variable "oidc_config_id" {
+  type        = string
+  description = "BYO oidc id"
+}
