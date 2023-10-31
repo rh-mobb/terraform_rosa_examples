@@ -1,17 +1,7 @@
-variable "token" {
-  type      = string
-  sensitive = true
-}
-
 variable "url" {
   type        = string
   description = "Provide OCM environment by setting a value to url"
   default     = "https://api.openshift.com"
-}
-
-variable "managed" {
-  description = "Indicates whether it is a Red Hat managed or unmanaged (Customer hosted) OIDC Configuration"
-  type        = bool
 }
 
 variable "installer_role_arn" {

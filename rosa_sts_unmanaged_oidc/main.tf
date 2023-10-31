@@ -50,12 +50,16 @@ resource "time_sleep" "wait_10_seconds" {
   create_duration = "10s"
 }
 
-# Use the Managed OpenShift Installer Role to create the unmanaged OIDC provider
-locals {
-  installer_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role${var.path}${var.account_role_prefix}-Installer-Role"
+data "aws_caller_identity" "current" {
 }
 
-# Create managed OIDC config
+# Use the Managed OpenShift Installer Role to create the unmanaged OIDC provider
+locals {
+  path = coalesce(var.path, "/")
+  installer_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role${local.path}${var.account_role_prefix}-Installer-Role"
+}
+
+# Create unmanaged OIDC config
 module "oidc_provider" {
   source               = "../modules/unmanaged_oidc_provider"
   operator_role_prefix = var.operator_role_prefix
@@ -63,6 +67,10 @@ module "oidc_provider" {
   additional_tags      = var.additional_tags
   path                 = var.path
   installer_role_arn   = local.installer_role_arn
+  aws_region           = var.aws_region
+
+  # We need the account role to be created before we can make the OIDC provider
+  depends_on = [time_sleep.wait_10_seconds]
 }
 
 # Create the operator roles for ROSA
@@ -92,9 +100,12 @@ module "rosa_cluster" {
   max_replicas           = var.max_replicas
   oidc_config_id         = module.oidc_provider.id
   additional_tags        = var.additional_tags
+  vpc_cidr_block         = var.vpc_cidr_block
 
   #private link cluster values
   enable_private_link = var.enable_private_link
   aws_subnet_ids   = var.create_vpc ? module.vpc.private_subnets : var.aws_subnet_ids
+
+  depends_on = [time_sleep.wait_10_seconds]
 }
 

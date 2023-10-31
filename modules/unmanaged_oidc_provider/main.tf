@@ -19,20 +19,12 @@ resource "rhcs_rosa_oidc_config_input" "oidc_input" {
   region = var.aws_region
 }
 
-resource "rhcs_rosa_oidc_config" "oidc_config" {
-  managed            = false
-  secret_arn         = one(module.oidc_config_input_resources[*].secret_arn)
-  issuer_url         = one(rhcs_rosa_oidc_config_input.oidc_input[*].issuer_url)
-  installer_role_arn = var.installer_role_arn
-}
-
 # Create the OIDC config resources on AWS
 module "oidc_config_input_resources" {
   source  = "terraform-redhat/rosa-sts/aws"
   version = "0.0.15"
 
   create_oidc_config_resources = true
-  create_oidc_provider  = true
 
   bucket_name             = one(rhcs_rosa_oidc_config_input.oidc_input[*].bucket_name)
   discovery_doc           = one(rhcs_rosa_oidc_config_input.oidc_input[*].discovery_doc)
@@ -41,6 +33,25 @@ module "oidc_config_input_resources" {
   private_key_file_name   = one(rhcs_rosa_oidc_config_input.oidc_input[*].private_key_file_name)
   private_key_secret_name = one(rhcs_rosa_oidc_config_input.oidc_input[*].private_key_secret_name)
 
+  tags                        = var.additional_tags
+  path                        = var.path
+}
+
+resource "rhcs_rosa_oidc_config" "oidc_config" {
+  managed            = false
+  secret_arn         = one(module.oidc_config_input_resources[*].secret_arn)
+  issuer_url         = one(rhcs_rosa_oidc_config_input.oidc_input[*].issuer_url)
+  installer_role_arn = var.installer_role_arn
+}
+
+# Create the unmanaged OIDC provider
+module "operator_roles_and_oidc_provider" {
+  source  = "terraform-redhat/rosa-sts/aws"
+  version = "0.0.15"
+
+  create_oidc_provider  = true
+
+  cluster_id                  = ""
   rh_oidc_provider_thumbprint = rhcs_rosa_oidc_config.oidc_config.thumbprint
   rh_oidc_provider_url        = rhcs_rosa_oidc_config.oidc_config.oidc_endpoint_url
   tags                        = var.additional_tags
