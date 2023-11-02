@@ -57,6 +57,8 @@ module "oidc_provider" {
   account_role_prefix  = var.account_role_prefix
   additional_tags      = var.additional_tags
   path                 = var.path
+  # We need the account role to be created before we can make the OIDC provider
+  depends_on = [time_sleep.wait_10_seconds]
 }
 
 # Create the operator roles for ROSA
