@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.19.0"
+  version = "5.1.2"
 
   count = var.create_vpc ? 1 : 0
   name  = var.vpc_name
@@ -8,9 +8,7 @@ module "vpc" {
 
   azs             = var.availability_zones
   private_subnets = var.private_subnet_cidrs
-  #overwrite defualt naming
-  #private_subnet_names = ["${var.vpc_name}-prv-subnet", "${var.vpc_name}-prv-subnet","${var.vpc_name}-prv-subnet"]
-  public_subnets = var.public_subnet_cidrs
+  public_subnets  = var.public_subnet_cidrs
 
   enable_nat_gateway   = true
   single_nat_gateway   = var.single_nat_gateway
@@ -19,4 +17,3 @@ module "vpc" {
 
   tags = var.additional_tags
 }
-

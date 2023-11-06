@@ -1,0 +1,39 @@
+#AWS Info
+aws_region="us-west-2"
+availability_zones = ["us-west-2a","us-west-2b","us-west-2c"]#["us-west-2a"]
+# Module selection
+create_vpc=true
+create_account_roles=false
+create_aad_app=false
+create_idp_aad=false
+#ROSA Cluster Info
+operator_role_prefix="mobbtf"
+ocm_environment="production"
+cluster_name="mobbtf-01"
+multi_az=true
+account_role_prefix="ManagedOpenShift"
+managed_oidc=true
+rosa_openshift_version="4.13.12"
+machine_type="m5.xlarge" #"m6a.2xlarge"
+worker_node_replicas = 2
+autoscaling_enabled = true
+min_replicas = 3
+#Change min to at least 3 for HA
+max_replicas = 6
+additional_tags={
+     Terraform = "true"
+     Environment = "dev"
+     owner = "mobbtf@redhat.com"
+     ROSAClusterName="mobbtf-01"
+     project="mobbtf"
+     jira="cssi-1341" 
+   }
+#Private Link Cluster & VPC
+vpc_name="mobbvpc"
+single_nat_gateway=true 
+enable_private_link=true
+vpc_cidr_block="10.12.0.0/16"
+private_subnet_cidrs=["10.12.0.0/22", "10.12.4.0/22", "10.12.8.0/22"]
+public_subnet_cidrs=["10.12.128.0/24", "10.12.129.0/24", "10.12.130.0/24"]
+#IDP Info
+aad_tenant_id="AZURE_Tenant_id"

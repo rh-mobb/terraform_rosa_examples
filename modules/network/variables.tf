@@ -1,19 +1,17 @@
-variable create_vpc {
-    type = bool
-    description = "Create custom VPC for ROSA cluster"
-    default = false
+variable "create_vpc" {
+  type        = bool
+  description = "Create custom VPC for ROSA cluster"
+  default     = false
 }
 
 variable "aws_region" {
   type        = string
   description = "The region to create the ROSA cluster in"
   default     = "us-east-2"
-  
 }
+
 variable "vpc_name" {
-    type = string
-    default = "kumudu-tf-vpc"
-  
+  type = string
 }
 
 variable "additional_tags" {
@@ -51,6 +49,3 @@ variable "single_nat_gateway" {
   description = "Single NAT or per NAT for subnet"
   default     = false
 }
-
-
-

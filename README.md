@@ -1,6 +1,6 @@
 # Provision ROSA STS Cluster using Red Hat OCM Terraform provider
 
-This guide shows how to create a Public or Private Link STS ROSA cluster, the required operator IAM roles and the oidc provider using Red Hat [OCM Terraform Provider](https://github.com/terraform-redhat/terraform-provider-rhcs). This guide also provides examples of creating other necessary components like AWS VPC, Azure App Registration for Azure AD IDP provider and Azure AD IDP for ROSA Cluster. These additional component creations can be enabled using terraform variables. The goal of this guide is to show how to create a ROSA STS cluster and how to add additional terraform modules to extend cluster provisioning using terraform automation. 
+This guide shows how to create a Public or Private Link STS ROSA cluster, the required operator IAM roles and the oidc provider using Red Hat [RHCS Terraform Provider](https://github.com/terraform-redhat/terraform-provider-rhcs). This guide also provides examples of creating other necessary components like AWS VPC, Azure App Registration for Azure AD IDP provider and Azure AD IDP for ROSA Cluster. These additional component creations can be enabled using terraform variables. The goal of this guide is to show how to create a ROSA STS cluster and how to add additional terraform modules to extend cluster provisioning using terraform automation. 
 
 > This guide extends the official OCM ROSA Cluster TF privisioning example. Detail info can be found [here](https://github.com/terraform-redhat/terraform-provider-rhcs/tree/main/examples/create_rosa_sts_cluster/classic_sts/cluster)
 
@@ -26,11 +26,22 @@ Following example shows how to configure common terraform environment variables.
 ### Usage
 Following examples show how to create the terraform.tfvars file for Public and Private link ROSA STS clusters.
 
-## Sample terraform.tfvars file for the Public ROSA STS Cluster
+## Quick getting started
+
+A quick setup without using modules to build a ROSA STS cluster can be found in the ./rosa_sts_managed_oidc_no_modules directory. This can be helpful if you need to copy working terraform code into a protected environment without needing to copy the modules directory. This has limited customisation but is a good starting point for new users.
+
+## Customisable ROSA STS Cluster with managed OIDC provider
+
+You can use the example in the ./rosa_sts_managed_oidc directory to make a ROSA STS cluster with a Managed OIDC provider
+
+## Customisable ROSA STS Cluster with unmanaged OIDC provider
+
+You can use the example in the ./rosa_sts_unmanaged_oidc directory to make a ROSA STS cluster with a self managed (unmanaged) OIDC provider
+
+### Sample terraform.tfvars file for the Public ROSA STS Cluster
 ```
 token="OCM TOKEN Value"
 url="https://api.openshift.com"
-redhat_aws_account_id="REDHAT AWS ACCOUNT ID"
 # Module selection
 create_vpc=false
 create_aad_app=false
@@ -60,7 +71,6 @@ aad_tenant_id="AZURE_Tenant_id"
 ```
 token="OCM TOKEN Value"
 url="https://api.openshift.com"
-redhat_aws_account_id="REDHAT AWS ACCOUNT ID"
 # Module selection
 create_vpc=true
 create_aad_app=false
@@ -95,8 +105,9 @@ aad_tenant_id="AZURE_Tenant_id"
 
     ```bash
     git clone https://github.com/rh-mobb/terraform_ocm_rosa_sts.git
-    cd terraform_ocm_rosa_sts
     ```
+
+1. Change to the directory you wish to use to deploy your cluster
 
 1. Create terraform.tfvars as above, then run
 
@@ -113,3 +124,9 @@ aad_tenant_id="AZURE_Tenant_id"
     ```bash
     terraform destroy
     ```
+
+## FAQ
+
+1. Do I want managed or unmanaged OIDC providers?
+
+The managed OIDC provider creates the underlying resources in a Red Hat account, which you can consume. An unmanaged OIDC provider creates the underlying resources in your own account. If you are unsure, starting with Managed is probably easier.
