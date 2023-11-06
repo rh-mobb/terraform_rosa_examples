@@ -1,9 +1,3 @@
-#OCM settings
-variable "url" {
-  type    = string
-  default = "https://api.openshift.com"
-}
-
 #AWS settings
 variable "aws_region" {
   type    = string
@@ -19,7 +13,6 @@ variable "availability_zones" {
 #Cluster settings
 variable "cluster_name" {
   type    = string
-  default = "kumudu-tf-01"
 }
 
 variable "rosa_openshift_version" {
@@ -29,12 +22,10 @@ variable "rosa_openshift_version" {
 
 variable "account_role_prefix" {
   type    = string
-  default = "kumudu"
 }
 
 variable "operator_role_prefix" {
   type    = string
-  default = "mobbkh"
 }
 
 variable "vpc_cidr_block" {

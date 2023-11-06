@@ -21,31 +21,7 @@ variable "account_role_policies" {
   default = null
 }
 
-# Used ?
-variable "rh_oidc_provider_thumbprint" {
-  description = "Thumbprint for https://rh-oidc.s3.us-east-1.amazonaws.com"
-  type        = string
-  default     = "917e732d330f9a12404f73d8bea36948b929dffc"
-}
-
-variable "all_versions" {
-  description = "OpenShift versions"
-  type = object({
-    item = object({
-      id   = string
-      name = string
-    })
-    search = string
-    order  = string
-    items = list(object({
-      id   = string
-      name = string
-    }))
-  })
-  default = null
-}
-
-# Operrator Roles
+# Operator Roles
 variable "operator_role_prefix" {
   type    = string
   default = "mobbtf"
@@ -105,7 +81,6 @@ variable "create_idp_aad" {
 variable "cluster_name" {
   type        = string
   description = "The name of the ROSA cluster to create"
-  default     = "mobb-tf"
 
   validation {
     condition     = can(regex("^[a-z][-a-z0-9]{0,13}[a-z0-9]$", var.cluster_name))

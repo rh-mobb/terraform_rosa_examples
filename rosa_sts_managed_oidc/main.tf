@@ -36,7 +36,6 @@ module "account_role" {
   path                   = var.path
   rosa_openshift_version = var.rosa_openshift_version
   account_role_policies  = var.account_role_policies
-  all_versions           = var.all_versions
   operator_role_policies = var.operator_role_policies
   additional_tags        = var.additional_tags
 }

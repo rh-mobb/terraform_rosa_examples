@@ -51,23 +51,6 @@ variable "operator_role_policies" {
   default = null
 }
 
-variable "all_versions" {
-  description = "OpenShift versions"
-  type        = object({
-    item = object({
-      id   = string
-      name = string
-    })
-    search = string
-    order  = string
-    items  = list(object({
-      id   = string
-      name = string
-    }))
-  })
-  default = null
-}
-
 variable additional_tags {
     type = map(string)
 }
