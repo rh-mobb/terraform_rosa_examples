@@ -15,11 +15,6 @@ variable "url" {
   default = "https://api.openshift.com"
 }
 
-variable "ocm_environment" {
-  type    = string
-  default = "production"
-}
-
 # Account Roles
 variable "account_role_prefix" {
   type    = string
