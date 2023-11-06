@@ -16,9 +16,7 @@ terraform {
 }
 
 # Export token using the RHCS_TOKEN environment variable
-provider "rhcs" {
-  url   = var.url
-}
+provider "rhcs" {}
 
 provider "aws" {
   region = var.aws_region

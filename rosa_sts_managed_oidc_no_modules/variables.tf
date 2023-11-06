@@ -10,11 +10,6 @@ variable "rosa_openshift_version" {
   description = "Desired version of OpenShift for the cluster, for example '4.1.0'. If version is greater than the currently running version, an upgrade will be scheduled."
 }
 
-variable "url" {
-  type    = string
-  default = "https://api.openshift.com"
-}
-
 # Account Roles
 variable "account_role_prefix" {
   type    = string
