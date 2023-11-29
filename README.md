@@ -29,6 +29,14 @@ Following examples show how to create the terraform.tfvars file for Public and P
 
 A quick setup without using modules to build a ROSA STS cluster can be found in the ./rosa_sts_managed_oidc_no_modules directory. This can be helpful if you need to copy working terraform code into a protected environment without needing to copy the modules directory. This has limited customisation but is a good starting point for new users.
 
+## Example of a ROSA public cluster with a managed OIDC provider
+
+Change to the ./rosa_sts_managed_oidc_no_modules directory and run:
+
+```bash
+terraform apply -var cluster_name=my-rosa -var account_role_prefix=my-rosa -var operator_role_prefix=my-rosa -var aws_region=eu-west-1 -var availability_zones='["eu-west-1a","eu-west-1b","eu-west-1c"]' -var multi_az=true -var create_vpc=true -var enable_private_link=false
+```
+
 ## Customisable ROSA STS Cluster with managed OIDC provider
 
 You can use the example in the ./rosa_sts_managed_oidc directory to make a ROSA STS cluster with a Managed OIDC provider
