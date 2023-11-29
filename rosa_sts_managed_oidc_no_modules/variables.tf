@@ -1,6 +1,6 @@
 variable "rosa_openshift_version" {
   type        = string
-  default     = "4.13"
+  default     = "4.14.2"
   description = "Desired version of OpenShift for the cluster, for example '4.1.0'. If version is greater than the currently running version, an upgrade will be scheduled."
 }
 
@@ -92,7 +92,7 @@ variable "machine_type" {
 }
 
 variable "worker_node_replicas" {
-  default     = null
+  default     = 3
   description = "Number of worker nodes to provision. Single zone clusters need at least 2 nodes, multizone clusters need at least 3 nodes"
   type        = number
 }
@@ -131,7 +131,6 @@ variable "proxy" {
 variable "enable_private_link" {
   type        = bool
   description = "This enables private link"
-  default     = false
 }
 
 #VPC Info
