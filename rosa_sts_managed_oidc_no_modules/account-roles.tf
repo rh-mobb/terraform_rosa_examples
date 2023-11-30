@@ -9,7 +9,7 @@ module "create_account_roles" {
   create_account_roles  = true
   create_operator_roles = false
 
-  account_role_prefix    = var.account_role_prefix
+  account_role_prefix    = var.cluster_name
   path                   = var.path
   rosa_openshift_version = regex("^[0-9]+\\.[0-9]+", var.rosa_openshift_version)
   account_role_policies  = data.rhcs_policies.all_policies.account_role_policies

@@ -129,3 +129,11 @@ aad_tenant_id="AZURE_Tenant_id"
 1. Do I want managed or unmanaged OIDC providers?
 
 The managed OIDC provider creates the underlying resources in a Red Hat account, which you can consume. An unmanaged OIDC provider creates the underlying resources in your own account. If you are unsure, starting with Managed is probably easier.
+
+2. I'm getting this error, what do I do?
+
+```
+│ Error: either a token, an user name and password or a client identifier and secret are necessary, but none has been provided
+```
+
+Please export your RHCS_TOKEN as an environment variable, you can get this from https://console.redhat.com/openshift/token/rosa
