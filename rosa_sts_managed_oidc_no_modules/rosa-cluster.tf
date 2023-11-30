@@ -47,9 +47,11 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
     rosa_creator_arn = data.aws_caller_identity.current.arn
   }
   #Private link settings
-  aws_private_link = var.private_cluster
+
+  private          = var.enable_private_link
+  aws_private_link = var.enable_private_link
   aws_subnet_ids   = var.create_vpc ? concat(module.vpc[0].private_subnets, module.vpc[0].public_subnets) : var.private_subnet_ids
-  machine_cidr     = var.private_cluster ? var.vpc_cidr_block : null
+  machine_cidr     = var.enable_private_link ? var.vpc_cidr_block : null
 
   depends_on = [module.create_account_roles]
 }
