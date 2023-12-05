@@ -3,8 +3,8 @@ resource "rhcs_rosa_oidc_config" "oidc_config" {
 }
 
 data "rhcs_rosa_operator_roles" "operator_roles" {
-  operator_role_prefix = var.cluster_name
-  account_role_prefix  = var.cluster_name
+  operator_role_prefix = local.cluster_name
+  account_role_prefix  = local.cluster_name
 }
 
 module "oidc_provider" {

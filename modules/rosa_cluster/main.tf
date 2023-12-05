@@ -41,6 +41,13 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   aws_subnet_ids   = var.aws_subnet_ids
   machine_cidr     = var.enable_private_link ? var.vpc_cidr_block : null
 
+  lifecycle {
+    precondition {
+      condition     = can(regex("^[a-z][-a-z0-9]{0,13}[a-z0-9]$", var.cluster_name))
+      error_message = "ROSA cluster name must be less than 16 characters, be lower case alphanumeric, with only hyphens."
+    }
+  }
+
 }
 
 resource "rhcs_cluster_wait" "rosa_cluster" {

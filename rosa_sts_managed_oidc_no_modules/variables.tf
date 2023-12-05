@@ -35,13 +35,9 @@ variable "create_vpc" {
 
 # ROSA Cluster info
 variable "cluster_name" {
+  default     = null
   type        = string
   description = "The name of the ROSA cluster to create"
-
-  validation {
-    condition     = can(regex("^[a-z][-a-z0-9]{0,13}[a-z0-9]$", var.cluster_name))
-    error_message = "ROSA cluster name must be less than 16 characters, be lower case alphanumeric, with only hyphens."
-  }
 }
 
 variable "additional_tags" {
