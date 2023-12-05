@@ -4,12 +4,6 @@ variable "rosa_openshift_version" {
   description = "Desired version of OpenShift for the cluster, for example '4.1.0'. If version is greater than the currently running version, an upgrade will be scheduled."
 }
 
-# Account Roles
-variable "account_role_prefix" {
-  type    = string
-  default = "mobb"
-}
-
 variable "account_role_policies" {
   description = "account role policies details for account roles creation"
   type = object({
@@ -19,12 +13,6 @@ variable "account_role_policies" {
     sts_instance_controlplane_permission_policy = string
   })
   default = null
-}
-
-# Operator Roles
-variable "operator_role_prefix" {
-  type    = string
-  default = "mobbtf"
 }
 
 variable "operator_role_policies" {
@@ -42,25 +30,14 @@ variable "operator_role_policies" {
 
 variable "create_vpc" {
   type        = bool
-  description = "Create custom VPC for ROSA cluster"
-}
-
-variable "managed_oidc" {
-  type        = bool
-  description = "Red Hat managed or unmanaged (Customer hosted) OIDC Configuration"
-  default     = true
+  description = "Would you like to make a new VPC for your ROSA cluster? true or false"
 }
 
 # ROSA Cluster info
 variable "cluster_name" {
+  default     = null
   type        = string
   description = "The name of the ROSA cluster to create"
-  default     = "poc-andyr"
-
-  validation {
-    condition     = can(regex("^[a-z][-a-z0-9]{0,13}[a-z0-9]$", var.cluster_name))
-    error_message = "ROSA cluster name must be less than 16 characters, be lower case alphanumeric, with only hyphens."
-  }
 }
 
 variable "additional_tags" {
@@ -82,11 +59,11 @@ variable "path" {
 variable "multi_az" {
   type        = bool
   description = "Multi AZ Cluster for High Availability"
-  default     = false
+  default     = true
 }
 
 variable "machine_type" {
-  description = "The AWS instance type that used for the instances creation ."
+  description = "The AWS instance type used for your default worker pool"
   type        = string
   default     = "m5.xlarge"
 }
@@ -107,13 +84,13 @@ variable "autoscaling_enabled" {
 variable "min_replicas" {
   description = "The minimum number of replicas for autoscaling."
   type        = number
-  default     = null
+  default     = 3
 }
 
 variable "max_replicas" {
   description = "The maximum number of replicas not exceeded by the autoscaling functionality."
   type        = number
-  default     = null
+  default     = 3
 }
 
 variable "proxy" {
@@ -127,10 +104,9 @@ variable "proxy" {
   })
 }
 
-#Private link cluster Info
-variable "enable_private_link" {
+variable "private_cluster" {
   type        = bool
-  description = "This enables private link"
+  description = "Do you want this cluster to be private? true or false"
 }
 
 #VPC Info
@@ -168,19 +144,6 @@ variable "single_nat_gateway" {
 variable "aws_region" {
   type    = string
   default = "us-east-2"
-}
-
-variable "availability_zones" {
-  type        = list(any)
-  description = "The availability zones to use for the cluster"
-  default     = ["us-east-2a", "us-east-2b", "us-east-2c"]
-}
-
-
-variable "installer_role_arn" {
-  description = "STS Role ARN with get secrets permission, relevant only for unmanaged OIDC config"
-  type        = string
-  default     = null
 }
 
 variable "private_subnet_ids" {

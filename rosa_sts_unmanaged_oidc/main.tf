@@ -14,15 +14,30 @@
 # limitations under the License.
 #
 
+data "aws_availability_zones" "available" {}
+
+locals {
+  # Extract availability zone names for the specified region, limited to 3
+  region_azs = slice([for zone in data.aws_availability_zones.available.names : format("%s", zone)], 0, 3)
+  # If cluster_name is not null, use that, otherwise generate a random cluster name
+  cluster_name = coalesce(var.cluster_name, "rosa-${random_string.random_name.result}")
+}
+
+resource "random_string" "random_name" {
+  length           = 6
+  special          = false
+  upper            = false
+}
+
 # Create the VPC if it is wanted
 module "vpc" {
   create_vpc           = var.create_vpc
   source               = "../modules/network"
   aws_region           = var.aws_region
-  vpc_name             = var.vpc_name
+  vpc_name             = "${local.cluster_name}_vpc"
   additional_tags      = var.additional_tags
   vpc_cidr_block       = var.vpc_cidr_block
-  availability_zones   = var.availability_zones
+  availability_zones   = local.region_azs
   private_subnet_cidrs = var.private_subnet_cidrs
   public_subnet_cidrs  = var.public_subnet_cidrs
   single_nat_gateway   = var.single_nat_gateway
@@ -32,7 +47,7 @@ module "vpc" {
 module "account_role" {
   create_account_roles   = var.create_account_roles
   source                 = "../modules/account_roles"
-  account_role_prefix    = var.account_role_prefix
+  account_role_prefix    = local.cluster_name
   path                   = var.path
   rosa_openshift_version = var.rosa_openshift_version
   account_role_policies  = var.account_role_policies
@@ -54,14 +69,14 @@ data "aws_caller_identity" "current" {
 # Use the Managed OpenShift Installer Role to create the unmanaged OIDC provider
 locals {
   path = coalesce(var.path, "/")
-  installer_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role${local.path}${var.account_role_prefix}-Installer-Role"
+  installer_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role${local.path}${local.cluster_name}-Installer-Role"
 }
 
 # Create unmanaged OIDC config
 module "oidc_provider" {
   source               = "../modules/unmanaged_oidc_provider"
-  operator_role_prefix = var.operator_role_prefix
-  account_role_prefix  = var.account_role_prefix
+  operator_role_prefix = local.cluster_name
+  account_role_prefix  = local.cluster_name
   additional_tags      = var.additional_tags
   path                 = var.path
   installer_role_arn   = local.installer_role_arn
@@ -77,32 +92,31 @@ module "operator_roles" {
   source               = "../modules/operator_roles"
   oidc_thumbprint       = module.oidc_provider.thumbprint
   oidc_endpoint_url     = module.oidc_provider.oidc_endpoint_url
-  operator_role_prefix = var.operator_role_prefix
+  operator_role_prefix = local.cluster_name
   additional_tags      = var.additional_tags
 }
 
 # Make the ROSA Cluster
 module "rosa_cluster" {
   source                 = "../modules/rosa_cluster"
-  cluster_name           = var.cluster_name
+  cluster_name           = local.cluster_name
   rosa_openshift_version = var.rosa_openshift_version
   aws_region             = var.aws_region
   multi_az               = var.multi_az
-  availability_zones     = var.availability_zones
-  account_role_prefix    = var.account_role_prefix
-  operator_role_prefix   = var.operator_role_prefix
+  availability_zones     = local.region_azs
+  account_role_prefix    = local.cluster_name
+  operator_role_prefix   = local.cluster_name
   machine_type           = var.machine_type
   proxy                  = var.proxy
+  worker_node_replicas   = var.worker_node_replicas
   autoscaling_enabled    = var.autoscaling_enabled
-  min_replicas           = var.min_replicas
-  max_replicas           = var.max_replicas
   oidc_config_id         = module.oidc_provider.id
   additional_tags        = var.additional_tags
   vpc_cidr_block         = var.vpc_cidr_block
 
   #private link cluster values
-  enable_private_link = var.enable_private_link
-  aws_subnet_ids   = var.create_vpc ? module.vpc.private_subnets : var.aws_subnet_ids
+  enable_private_link = var.private_cluster
+  aws_subnet_ids      = var.create_vpc ? concat(module.vpc.public_subnets, module.vpc.private_subnets) : var.aws_subnet_ids
 
   depends_on = [time_sleep.wait_10_seconds]
 }

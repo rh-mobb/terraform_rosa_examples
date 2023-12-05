@@ -16,10 +16,8 @@ Variables can be passed to terraform using either Environment variables or using
 
 Following example shows how to configure common terraform environment variables.
    ```bash
-   export TF_VAR_url="https://api.openshift.com"
-   export TF_LOG="DEBUG"
-   export TF_LOG_PATH="logs/terraform.log"
    export RHCS_TOKEN="OCM TOKEN Value"
+   export TF_VAR_cluster_name="$Your_cluster_name"
    ```
 
 ### Usage
@@ -47,16 +45,11 @@ You can use the example in the ./rosa_sts_unmanaged_oidc directory to make a ROS
 
 ### Sample terraform.tfvars file for the Public ROSA STS Cluster
 ```
-token="OCM TOKEN Value"
-url="https://api.openshift.com"
 # Module selection
 create_vpc=false
-create_aad_app=false
-create_idp_aad=false
-create_account_roles=false
+create_account_roles=true
+create_operator_roles=true
 #ROSA Cluster Info
-account_role_prefix="ManagedOpenShift"
-operator_role_prefix="mobbtf"
 cluster_name="mobbtf-01"
 multi_az=true
 #AWS Info
@@ -70,22 +63,14 @@ additional_tags={
      TFOwner = "mobb@redhat.com"
      ROSAClusterName="mobbtf-01"
    }
-#Azure AD app reg Info
-aad_tenant_id="AZURE_Tenant_id"
 ```
 
 ## Sample terraform.tfvars file for the Private Link ROSA STS Cluster
 ```
-token="OCM TOKEN Value"
-url="https://api.openshift.com"
-# Module selection
 create_vpc=true
-create_aad_app=false
-create_idp_aad=false
-create_account_roles=false
+create_account_roles=true
+create_operator_roles=true
 #ROSA Cluster Info
-account_role_prefix="ManagedOpenShift"
-operator_role_prefix="mobbtf"
 cluster_name="mobbtf-01"
 multi_az=true
 #AWS Info
@@ -102,8 +87,6 @@ additional_tags={
      TFOwner = "mobb@redhat.com"
      ROSAClusterName="mobbtf-01"
    }
-#Azure AD app reg Info
-aad_tenant_id="AZURE_Tenant_id"
 ```
 
 ## Deploy
@@ -137,3 +120,15 @@ aad_tenant_id="AZURE_Tenant_id"
 1. Do I want managed or unmanaged OIDC providers?
 
 The managed OIDC provider creates the underlying resources in a Red Hat account, which you can consume. An unmanaged OIDC provider creates the underlying resources in your own account. If you are unsure, starting with Managed is probably easier.
+
+2. I'm getting this error, what do I do?
+
+```
+│ Error: either a token, an user name and password or a client identifier and secret are necessary, but none has been provided
+```
+
+Please export your RHCS_TOKEN as an environment variable, you can get this from https://console.redhat.com/openshift/token/rosa
+
+3. Why is my cluster name something random like rosa-233is?
+
+A random name is generated for your cluster if you do not provide the variable `cluster_name`

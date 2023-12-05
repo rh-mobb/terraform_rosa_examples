@@ -1,13 +1,7 @@
 variable "rosa_openshift_version" {
   type        = string
-  default     = "4.13"
+  default     = "4.14.2"
   description = "Desired version of OpenShift for the cluster, for example '4.1.0'. If version is greater than the currently running version, an upgrade will be scheduled."
-}
-
-# Account Roles
-variable "account_role_prefix" {
-  type    = string
-  default = "mobb"
 }
 
 variable "account_role_policies" {
@@ -19,12 +13,6 @@ variable "account_role_policies" {
     sts_instance_controlplane_permission_policy = string
   })
   default = null
-}
-
-# Operator Roles
-variable "operator_role_prefix" {
-  type    = string
-  default = "mobbtf"
 }
 
 variable "operator_role_policies" {
@@ -44,48 +32,25 @@ variable "operator_role_policies" {
 variable "create_account_roles" {
   type        = bool
   description = "Create cluster wide accounts roles"
-  default     = false
+  default     = true
 }
 
 variable "create_operator_roles" {
   type        = bool
   description = "Create cluster wide operator roles"
-  default     = false
+  default     = true
 }
 
 variable "create_vpc" {
   type        = bool
   description = "Create custom VPC for ROSA cluster"
-  default     = false
-}
-
-variable "managed_oidc" {
-  type        = bool
-  description = "Red Hat managed or unmanaged (Customer hosted) OIDC Configuration"
-  default     = true
-}
-
-variable "create_aad_app" {
-  type        = bool
-  description = "Create a Azure AD app for ROSA cluster idp"
-  default     = false
-}
-
-variable "create_idp_aad" {
-  type        = bool
-  description = "Create Azure AD IDP for ROSA cluster"
-  default     = false
 }
 
 # ROSA Cluster info
 variable "cluster_name" {
   type        = string
   description = "The name of the ROSA cluster to create"
-
-  validation {
-    condition     = can(regex("^[a-z][-a-z0-9]{0,13}[a-z0-9]$", var.cluster_name))
-    error_message = "ROSA cluster name must be less than 16 characters, be lower case alphanumeric, with only hyphens."
-  }
+  default     = null
 }
 
 variable "additional_tags" {
@@ -107,16 +72,17 @@ variable "path" {
 variable "multi_az" {
   type        = bool
   description = "Multi AZ Cluster for High Availability"
-  default     = false
+  default     = true
 }
 
 variable "machine_type" {
   description = "The AWS instance type that used for the instances creation ."
   type        = string
+  default     = "m5.xlarge"
 }
 
 variable "worker_node_replicas" {
-  default     = null
+  default     = 3
   description = "Number of worker nodes to provision. Single zone clusters need at least 2 nodes, multizone clusters need at least 3 nodes"
   type        = number
 }
@@ -131,13 +97,13 @@ variable "autoscaling_enabled" {
 variable "min_replicas" {
   description = "The minimum number of replicas for autoscaling."
   type        = number
-  default     = null
+  default     = 3
 }
 
 variable "max_replicas" {
   description = "The maximum number of replicas not exceeded by the autoscaling functionality."
   type        = number
-  default     = null
+  default     = 3
 }
 
 variable "proxy" {
@@ -152,17 +118,9 @@ variable "proxy" {
 }
 
 #Private link cluster Info
-variable "enable_private_link" {
+variable "private_cluster" {
   type        = bool
-  description = "This enables private link"
-  default     = false
-}
-
-#VPC Info
-variable "vpc_name" {
-  type        = string
-  description = "VPC Name"
-  default     = "mobb-tf-vpc"
+  description = "Do you want this cluster to be private? true or false"
 }
 
 variable "vpc_cidr_block" {
@@ -198,61 +156,5 @@ variable "single_nat_gateway" {
 #AWS Info
 variable "aws_region" {
   type    = string
-  default = "us-east-2"
-}
-
-variable "availability_zones" {
-  type        = list(any)
-  description = "The availability zones to use for the cluster"
-  default     = ["us-east-2a", "us-east-2b", "us-east-2c"]
-}
-
-#Azure AD config
-variable "aad_app_name" {
-  type        = string
-  default     = "kumudu-tf-test-app"
-  description = "Azure AD App Name"
-}
-
-variable "aad_app_password_name" {
-  type        = string
-  default     = "kh-ROSA-Secret"
-  description = "AAD Secret Name"
-}
-
-variable "aad_app_redirect_uri" {
-  type        = string
-  default     = "https://oauth-openshift.apps.iv2wbc7f.westus2.aroapp.io/oauth2callback/AAD"
-  description = "AAD App Redirect_uri"
-}
-
-variable "aad_location" {
-  type        = string
-  default     = "eastus"
-  description = "Azure region"
-}
-
-#IDP
-variable "idp_name" {
-  type    = string
-  default = "AAD"
-}
-
-variable "aad_client_id" {
-  description = "Azure Application (client) ID"
-  default     = "known"
-  type        = string
-}
-
-variable "aad_client_secret" {
-  description = "Azure Client credentials"
-  default     = "known"
-  type        = string
-  sensitive   = true
-}
-
-variable "aad_tenant_id" {
-  description = "Azure Directory (tenant) ID"
-  type        = string
-  sensitive   = true
+  default = "eu-west-1"
 }

@@ -10,7 +10,6 @@ output "oidc_endpoint_url" {
   value = rhcs_cluster_rosa_classic.rosa_sts_cluster.sts.oidc_endpoint_url
 }
 
-/*
-output cluster_dns {
-   value = ocm_cluster_rosa_classic.rosa_sts_cluster.dns
-}*/
+output domain {
+   value = rhcs_cluster_rosa_classic.rosa_sts_cluster.domain
+}

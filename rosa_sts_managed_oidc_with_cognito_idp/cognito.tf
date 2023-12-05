@@ -7,7 +7,7 @@ resource "aws_cognito_user_pool" "cluster-idp" {
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
-  domain       = var.cluster_name
+  domain       = local.cluster_name
   user_pool_id = aws_cognito_user_pool.cluster-idp.id
 }
 
