@@ -55,7 +55,7 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
     }
   }
 
-  depends_on = [module.create_account_roles]
+  depends_on = [time_sleep.wait_10_seconds]
 }
 
 resource "rhcs_cluster_wait" "wait_for_cluster_build" {
