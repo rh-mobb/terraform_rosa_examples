@@ -151,3 +151,14 @@ variable "private_subnet_ids" {
   description = "VPC private subnets IDs for ROSA Cluster"
   default     = []
 }
+
+variable "admin_username" {
+  type = string
+  description = "The username for the admin user"
+}
+
+variable "admin_password" {
+  type = string
+  description = "The password for the admin user"
+  sensitive = true
+}

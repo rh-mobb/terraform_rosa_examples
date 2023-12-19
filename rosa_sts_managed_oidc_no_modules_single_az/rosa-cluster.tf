@@ -47,6 +47,10 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
     rosa_creator_arn = data.aws_caller_identity.current.arn
   }
   machine_cidr     = var.vpc_cidr_block
+  admin_credentials      = {
+    username = var.admin_username
+    password = var.admin_password
+  }
 
   lifecycle {
     precondition {
@@ -62,4 +66,8 @@ resource "rhcs_cluster_wait" "wait_for_cluster_build" {
   cluster = rhcs_cluster_rosa_classic.rosa_sts_cluster.id
   # timeout in minutes
   timeout = 60
+}
+
+output "test" {
+  value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.username
 }

@@ -7,3 +7,4 @@ terraform.tfstate.*
 *.lock.hcl
 .env
 .terraform.tfstate.lock.info
+*.log

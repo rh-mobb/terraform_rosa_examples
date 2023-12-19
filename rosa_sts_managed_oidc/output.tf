@@ -10,17 +10,13 @@ output "rosa_cluster" {
       operator_iam_roles    = module.operator_roles_and_oidc.operator_iam_roles
     }*/
   ] }
+  sensitive = true
 }
 
-##
-output "oidc_config_id" {
-  value = module.oidc_provider.id
+output "cluster_id" {
+  value = module.rosa_cluster.cluster_id
 }
 
-output "oidc_endpoint_url" {
-  value = module.oidc_provider.oidc_endpoint_url
-}
-
-output "thumbprint" {
-  value = module.oidc_provider.thumbprint
+output "domain" {
+  value = module.rosa_cluster.domain
 }
