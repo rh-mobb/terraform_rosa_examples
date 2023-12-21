@@ -5,10 +5,7 @@ output "rosa_cluster" {
     },
     {
       cluster_id = module.rosa_cluster.cluster_id
-    } /*,
-    {
-      operator_iam_roles    = module.operator_roles_and_oidc.operator_iam_roles
-    }*/
+    }
   ] }
   sensitive = true
 }
@@ -19,4 +16,8 @@ output "cluster_id" {
 
 output "domain" {
   value = module.rosa_cluster.domain
+}
+
+output "vpc_id" {
+  value = var.create_vpc ? module.vpc.vpc_id : null
 }
