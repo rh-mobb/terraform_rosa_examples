@@ -67,7 +67,3 @@ resource "rhcs_cluster_wait" "wait_for_cluster_build" {
   # timeout in minutes
   timeout = 60
 }
-
-output "test" {
-  value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.username
-}
