@@ -18,6 +18,6 @@ output admin_username {
   value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.username
 }
 
-output admin_passsword {
+output admin_password {
   value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.password
 }
