@@ -13,3 +13,11 @@ output "oidc_endpoint_url" {
 output domain {
    value = rhcs_cluster_rosa_classic.rosa_sts_cluster.domain
 }
+
+output admin_username {
+  value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.username
+}
+
+output admin_passsword {
+  value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.password
+}

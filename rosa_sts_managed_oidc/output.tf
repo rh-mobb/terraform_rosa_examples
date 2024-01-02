@@ -5,22 +5,19 @@ output "rosa_cluster" {
     },
     {
       cluster_id = module.rosa_cluster.cluster_id
-    } /*,
-    {
-      operator_iam_roles    = module.operator_roles_and_oidc.operator_iam_roles
-    }*/
+    }
   ] }
+  sensitive = true
 }
 
-##
-output "oidc_config_id" {
-  value = module.oidc_provider.id
+output "cluster_id" {
+  value = module.rosa_cluster.cluster_id
 }
 
-output "oidc_endpoint_url" {
-  value = module.oidc_provider.oidc_endpoint_url
+output "domain" {
+  value = module.rosa_cluster.domain
 }
 
-output "thumbprint" {
-  value = module.oidc_provider.thumbprint
+output "vpc_id" {
+  value = var.create_vpc ? module.vpc.vpc_id : null
 }

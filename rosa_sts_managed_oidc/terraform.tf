@@ -25,13 +25,8 @@ provider "aws" {
   }
 }
 
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-  #Add your tenant id if you have multiple tenants
-  # tenant_id = "XXXX-XXXX-XXX-XXXX"
-}
-
+#provider "kubernetes" {
+#  username = module.rosa_cluster.admin_username
+#  password = module.rosa_cluster.admin_password
+#  host     = module.rosa_cluster.api_url
+#}

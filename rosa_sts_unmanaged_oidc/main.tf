@@ -113,6 +113,10 @@ module "rosa_cluster" {
   oidc_config_id         = module.oidc_provider.id
   additional_tags        = var.additional_tags
   vpc_cidr_block         = var.vpc_cidr_block
+  admin_credentials      = {
+    username = var.admin_username
+    password = var.admin_password
+  }
 
   #private link cluster values
   enable_private_link = var.private_cluster

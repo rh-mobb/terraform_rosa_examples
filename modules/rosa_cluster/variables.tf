@@ -109,3 +109,9 @@ variable "oidc_config_id" {
   type        = string
   description = "BYO oidc id"
 }
+
+variable "admin_credentials" {
+  type        = map(string)
+  default     = {}
+  description = "Admin username and password for the ROSA cluster"
+}

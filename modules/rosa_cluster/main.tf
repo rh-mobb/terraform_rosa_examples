@@ -23,7 +23,7 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   replicas             = local.worker_node_replicas
   aws_account_id       = data.aws_caller_identity.current.account_id
   availability_zones   = var.availability_zones
-  tags                 = var.additional_tags
+  tags                 = merge(var.additional_tags, { cluster_name = var.cluster_name })
   version              = var.rosa_openshift_version
   proxy                = var.proxy
   compute_machine_type = var.machine_type
@@ -35,6 +35,7 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   properties = {
     rosa_creator_arn = data.aws_caller_identity.current.arn
   }
+  admin_credentials = var.admin_credentials
   #Private link settings
   private          = var.enable_private_link
   aws_private_link = var.enable_private_link

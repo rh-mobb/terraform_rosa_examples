@@ -13,13 +13,13 @@ resource "aws_cognito_user_pool_domain" "domain" {
 
 resource "aws_cognito_user" "user" {
   user_pool_id = aws_cognito_user_pool.cluster-idp.id
-  username     = "rosa-admin"
-  password     = var.rosa_password
+  username     = var.admin_username
+  password     = var.admin_password
   attributes = {
     name               = "ROSA Admin"
-    email              = var.rosa_admin_email
+    email              = "${var.admin_username}@example.com"
     email_verified     = true
-    preferred_username = "rosa-admin"
+    preferred_username = var.admin_username
   }
   message_action = "SUPPRESS"
 }
