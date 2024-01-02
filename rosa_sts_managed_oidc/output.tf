@@ -21,3 +21,12 @@ output "domain" {
 output "vpc_id" {
   value = var.create_vpc ? module.vpc.vpc_id : null
 }
+
+output admin_username {
+  value = module.rosa_cluster.admin_username
+}
+
+output admin_password {
+  value = module.rosa_cluster.admin_password
+  sensitive = true
+}
