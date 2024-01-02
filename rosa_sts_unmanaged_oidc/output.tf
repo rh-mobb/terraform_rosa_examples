@@ -24,3 +24,16 @@ output "oidc_endpoint_url" {
 output "thumbprint" {
   value = module.oidc_provider.thumbprint
 }
+
+output admin_username {
+  value = module.rosa_cluster.admin_username
+}
+
+output admin_password {
+  value = module.rosa_cluster.admin_password
+  sensitive = true
+}
+
+output api_url {
+  value = module.rosa_cluster.api_url
+}

@@ -30,3 +30,7 @@ output admin_password {
   value = module.rosa_cluster.admin_password
   sensitive = true
 }
+
+output api_url {
+  value = module.rosa_cluster.api_url
+}

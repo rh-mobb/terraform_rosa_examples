@@ -21,3 +21,7 @@ output admin_username {
 output admin_password {
   value = rhcs_cluster_rosa_classic.rosa_sts_cluster.admin_credentials.password
 }
+
+output api_url {
+  value = rhcs_cluster_rosa_classic.rosa_sts_cluster.api_url
+}
