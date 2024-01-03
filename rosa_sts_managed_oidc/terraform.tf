@@ -9,7 +9,7 @@ terraform {
       version = "~>3.0"
     }
     rhcs = {
-      version = ">= 1.1.0"
+      version = ">= 1.4.0"
       source  = "terraform-redhat/rhcs"
     }
   }
@@ -24,9 +24,3 @@ provider "aws" {
     key_prefixes = ["kubernetes.io/"]
   }
 }
-
-#provider "kubernetes" {
-#  username = module.rosa_cluster.admin_username
-#  password = module.rosa_cluster.admin_password
-#  host     = module.rosa_cluster.api_url
-#}
