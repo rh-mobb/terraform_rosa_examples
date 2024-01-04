@@ -4,12 +4,8 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 4.20.0"
     }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>3.0"
-    }
     rhcs = {
-      version = ">= 1.1.0"
+      version = ">= 1.5.0"
       source  = "terraform-redhat/rhcs"
     }
   }
@@ -24,14 +20,3 @@ provider "aws" {
     key_prefixes = ["kubernetes.io/"]
   }
 }
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-  #Add your tenant id if you have multiple tenants
-  # tenant_id = "XXXX-XXXX-XXX-XXXX"
-}
-

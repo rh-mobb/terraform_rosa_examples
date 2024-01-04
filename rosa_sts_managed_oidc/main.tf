@@ -116,4 +116,3 @@ module "rosa_cluster" {
 
   depends_on = [time_sleep.wait_10_seconds]
 }
-

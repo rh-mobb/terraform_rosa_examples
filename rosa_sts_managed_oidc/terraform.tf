@@ -4,12 +4,8 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 4.20.0"
     }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>3.0"
-    }
     rhcs = {
-      version = ">= 1.1.0"
+      version = ">= 1.5.0"
       source  = "terraform-redhat/rhcs"
     }
   }
@@ -24,9 +20,3 @@ provider "aws" {
     key_prefixes = ["kubernetes.io/"]
   }
 }
-
-#provider "kubernetes" {
-#  username = module.rosa_cluster.admin_username
-#  password = module.rosa_cluster.admin_password
-#  host     = module.rosa_cluster.api_url
-#}
