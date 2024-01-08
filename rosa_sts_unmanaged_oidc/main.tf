@@ -24,9 +24,9 @@ locals {
 }
 
 resource "random_string" "random_name" {
-  length           = 6
-  special          = false
-  upper            = false
+  length  = 6
+  special = false
+  upper   = false
 }
 
 # Create the VPC if it is wanted
@@ -68,7 +68,7 @@ data "aws_caller_identity" "current" {
 
 # Use the Managed OpenShift Installer Role to create the unmanaged OIDC provider
 locals {
-  path = coalesce(var.path, "/")
+  path               = coalesce(var.path, "/")
   installer_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role${local.path}${local.cluster_name}-Installer-Role"
 }
 
@@ -89,11 +89,11 @@ module "oidc_provider" {
 # Create the operator roles for ROSA
 module "operator_roles" {
   create_operator_roles = var.create_operator_roles
-  source               = "../modules/operator_roles"
+  source                = "../modules/operator_roles"
   oidc_thumbprint       = module.oidc_provider.thumbprint
   oidc_endpoint_url     = module.oidc_provider.oidc_endpoint_url
-  operator_role_prefix = local.cluster_name
-  additional_tags      = var.additional_tags
+  operator_role_prefix  = local.cluster_name
+  additional_tags       = var.additional_tags
 }
 
 # Make the ROSA Cluster
@@ -113,14 +113,14 @@ module "rosa_cluster" {
   oidc_config_id         = module.oidc_provider.id
   additional_tags        = var.additional_tags
   vpc_cidr_block         = var.vpc_cidr_block
-  admin_credentials      = {
+  admin_credentials = {
     username = var.admin_username
     password = var.admin_password
   }
 
   #private link cluster values
   enable_private_link = var.private_cluster
-  aws_subnet_ids      = var.create_vpc ? concat(module.vpc.public_subnets, module.vpc.private_subnets) : var.aws_subnet_ids
+  aws_subnet_ids      = var.create_vpc ? var.private_cluster ? module.vpc.private_subnets : concat(module.vpc.public_subnets, module.vpc.private_subnets) : var.aws_subnet_ids
 
   depends_on = [time_sleep.wait_10_seconds]
 }
