@@ -24,9 +24,9 @@ locals {
 }
 
 resource "random_string" "random_name" {
-  length           = 6
-  special          = false
-  upper            = false
+  length  = 6
+  special = false
+  upper   = false
 }
 
 output "availability_zones" {
@@ -105,14 +105,14 @@ module "rosa_cluster" {
   oidc_config_id         = module.oidc_provider.id
   additional_tags        = var.additional_tags
   vpc_cidr_block         = var.vpc_cidr_block
-  admin_credentials      = {
+  admin_credentials = {
     username = var.admin_username
     password = var.admin_password
   }
 
   #private link cluster values
   enable_private_link = var.private_cluster
-  aws_subnet_ids      = var.create_vpc ? concat(module.vpc.public_subnets, module.vpc.private_subnets) : var.aws_subnet_ids
+  aws_subnet_ids      = var.create_vpc ? var.private_cluster ? module.vpc.private_subnets : concat(module.vpc.public_subnets, module.vpc.private_subnets) : var.aws_subnet_ids
 
   depends_on = [time_sleep.wait_10_seconds]
 }
