@@ -19,3 +19,9 @@ variable "admin_password" {
   type        = string
   sensitive   = true
 }
+
+variable "default_aws_tags" {
+  type = map(string)
+  description = "Default tags for AWS"
+  default = {}
+}

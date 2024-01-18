@@ -169,3 +169,9 @@ variable "admin_password" {
   description = "The password for the admin user"
   sensitive = true
 }
+
+variable "default_aws_tags" {
+  type = map(string)
+  description = "Default tags for AWS"
+  default = {}
+}

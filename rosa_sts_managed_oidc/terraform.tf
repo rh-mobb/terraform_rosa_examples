@@ -19,4 +19,7 @@ provider "aws" {
   ignore_tags {
     key_prefixes = ["kubernetes.io/"]
   }
+  default_tags {
+     tags = var.default_aws_tags
+  }
 }
