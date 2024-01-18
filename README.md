@@ -132,3 +132,11 @@ Please export your RHCS_TOKEN as an environment variable, you can get this from 
 3. Why is my cluster name something random like rosa-233is?
 
 A random name is generated for your cluster if you do not provide the variable `cluster_name`
+
+4. How do I add default tags for my clusters?
+
+You can export an environment variable like so:
+
+```
+export TF_VAR_default_aws_tags='{"owner"="mobb@redhat.com"}'
+```
