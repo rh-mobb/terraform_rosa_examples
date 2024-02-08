@@ -41,6 +41,7 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
   aws_private_link = var.enable_private_link
   aws_subnet_ids   = var.aws_subnet_ids
   machine_cidr     = var.enable_private_link ? var.vpc_cidr_block : null
+  wait_for_create_complete = true
 
   lifecycle {
     precondition {
@@ -49,10 +50,4 @@ resource "rhcs_cluster_rosa_classic" "rosa_sts_cluster" {
     }
   }
 
-}
-
-resource "rhcs_cluster_wait" "rosa_cluster" {
-  cluster = rhcs_cluster_rosa_classic.rosa_sts_cluster.id
-  # timeout in minutes
-  timeout = 60
 }
