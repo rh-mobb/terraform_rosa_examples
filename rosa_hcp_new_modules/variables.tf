@@ -4,17 +4,16 @@ variable "openshift_version" {
   description = "Desired version of OpenShift for the cluster, for example '4.1.0'. If version is greater than the currently running version, an upgrade will be scheduled."
 }
 
+variable "create_vpc" {
+  type        = bool
+  description = "Would you like to make a new VPC for your ROSA cluster? true or false"
+}
+
 # ROSA Cluster info
 variable "cluster_name" {
   default     = null
   type        = string
   description = "The name of the ROSA cluster to create"
-}
-
-variable "multi_az" {
-  type        = bool
-  description = "Multi AZ Cluster for High Availability"
-  default     = true
 }
 
 variable "additional_tags" {
@@ -25,6 +24,12 @@ variable "additional_tags" {
   }
   description = "Additional AWS resource tags"
   type        = map(string)
+}
+
+variable "multi_az" {
+  type        = bool
+  description = "Multi AZ Cluster for High Availability"
+  default     = true
 }
 
 variable "path" {
@@ -64,29 +69,23 @@ variable "max_replicas" {
   default     = 3
 }
 
-variable "http_proxy" {
+variable "proxy" {
   default     = null
-  description = "A proxy URL to use for creating HTTP connections outside the cluster. The URL scheme must be http."
-  type        = string
+  description = "cluster-wide HTTP or HTTPS proxy settings"
+  type = object({
+    http_proxy              = string           # required  http proxy
+    https_proxy             = string           # required  https proxy
+    additional_trust_bundle = optional(string) # a string contains contains a PEM-encoded X.509 certificate bundle that will be added to the nodes' trusted certificate store.
+    no_proxy                = optional(string) # no proxy
+  })
 }
 
-variable "https_proxy" {
-  default     = null
-  description = "A proxy URL to use for creating HTTPS connections outside the cluster."
-  type        = string
+variable "aws_subnet_ids" {
+  type        = list(any)
+  description = "A list of either the public or public + private subnet IDs to use for the cluster blocks to use for the cluster"
+  default     = ["subnet-01234567890abcdef", "subnet-01234567890abcdef", "subnet-01234567890abcdef"]
 }
 
-variable "no_proxy" {
-  default     = null
-  description = "A comma-separated list of destination domain names, domains, IP addresses or other network CIDRs to exclude proxying."
-  type        = string
-}
-
-variable "additional_trust_bundle" {
-  type        = string
-  description = "A string containing a PEM-encoded X.509 certificate bundle that will be added to the nodes' trusted certificate store."
-  default     = null
-}
 
 variable "private_cluster" {
   type        = bool
@@ -130,12 +129,6 @@ variable "aws_region" {
   default = "us-east-2"
 }
 
-variable "private_subnet_ids" {
-  type        = list(any)
-  description = "VPC private subnets IDs for ROSA Cluster"
-  default     = []
-}
-
 variable "admin_username" {
   type        = string
   description = "The username for the admin user"
@@ -151,9 +144,4 @@ variable "default_aws_tags" {
   type        = map(string)
   description = "Default tags for AWS"
   default     = {}
-}
-
-variable "permissions_boundary" {
-  type    = string
-  default = ""
 }
