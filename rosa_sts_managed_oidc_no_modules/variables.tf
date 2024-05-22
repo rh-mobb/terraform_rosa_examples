@@ -146,7 +146,7 @@ variable "aws_region" {
   default = "us-east-2"
 }
 
-variable "private_subnet_ids" {
+variable "aws_subnet_ids" {
   type        = list(any)
   description = "VPC private subnets IDs for ROSA Cluster"
   default     = []
