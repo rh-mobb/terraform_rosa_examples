@@ -29,6 +29,7 @@ module "rosa-classic" {
   aws_availability_zones = local.region_azs
   create_oidc            = true
   private                = var.private_cluster
+  aws_private_link       = var.private_cluster
   aws_subnet_ids         = var.create_vpc ? var.private_cluster ? module.vpc[0].private_subnets : concat(module.vpc[0].public_subnets, module.vpc[0].private_subnets) : var.aws_subnet_ids
   multi_az               = var.multi_az
   create_account_roles   = true
