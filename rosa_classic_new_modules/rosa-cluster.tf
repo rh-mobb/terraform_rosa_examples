@@ -18,6 +18,14 @@ locals {
   cluster_name = coalesce(var.cluster_name, "rosa-${random_string.random_name.result}")
 }
 
+# If we are making our own VPC, the network verifier can pop up very quickly, sometimes so quickly
+# it results in warnings for end users which are not correct. This prevents this.
+resource "time_sleep" "wait_60_seconds" {
+  count = var.create_vpc ? 1 : 0
+  depends_on = [module.vpc]
+  create_duration = "60s"
+}
+
 module "rosa-classic" {
   source                 = "terraform-redhat/rosa-classic/rhcs"
   version                = "1.6.2-prerelease.1"
@@ -34,4 +42,7 @@ module "rosa-classic" {
   multi_az               = var.multi_az
   create_account_roles   = true
   create_operator_roles  = true
+
+  # Currently the network verifier can run a little too quickly, causing UX warnings. This prevents it
+  depends_on = [time_sleep.wait_60_seconds]
 }
